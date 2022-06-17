@@ -9,8 +9,8 @@ var cvs=canvas.getContext('2d');
 function zero(x){
   return x>0?x:0;
 }
-function gameover(){
-  alert('gameover');if(st==0){x_mouse=y_mouse=4;x_ele=y_ele=5;}else{x_mouse=800;y_mouse=500;x_ele=801;y_ele=501}
+function gameover(tell="gameover"){
+  alert(tell);if(st==0){x_mouse=y_mouse=4;x_ele=y_ele=5;}else{x_mouse=800;y_mouse=500;x_ele=801;y_ele=501}
 }
 function me(x,y){
   cvs.beginPath();
@@ -19,7 +19,8 @@ function me(x,y){
   cvs.fillStyle='red';
   cvs.fill();
   cvs.closePath();
-  if(x_ele<0.5||1165.5<x_ele||y_ele<0.5||667.5<y_ele){gameover()}
+  if(x_ele<0.5||y_ele<0.5||567.5<y_ele){gameover()}
+  if(1065.5<x_ele){gameover('clear!!')}
 }
 function ene(x,y,r,a='rgba(0,0,0,0.78)'){
   cvs.beginPath();
