@@ -1,0 +1,300 @@
+<canvas id="canvas" width="966px" height="568px" style="position:fixed;top:100;left:200;"></canvas>
+<style>
+#canvas{border-style:solid;border-width:1px;border-color:();}
+</style>
+<script>
+var st=0;
+var canvas=document.getElementById('canvas');
+var cvs=canvas.getContext('2d');
+function zero(x){
+  return x>0?x:0;
+}
+function gameover(tell="gameover"){
+  alert(`${tell},
+mouse x:${x_mouse}
+mouse y:${y_mouse}
+object x:${x_ele}
+object y:${y_ele}`);if(st==0){x_mouse=y_mouse=4;x_ele=y_ele=5;c1=c2=c3=c4=c5=c6=c7=c8=c9=c10=c11=c12=1;}else{x_mouse=800;y_mouse=500;x_ele=801;y_ele=501}
+}
+function me(x,y){
+  cvs.beginPath();
+  cvs.clearRect(0,0,canvas.width,canvas.height);
+  cvs.arc(x,y,5,0,2*Math.PI,false);
+  cvs.fillStyle='red';
+  cvs.fill();
+  cvs.closePath();
+  if(x_ele<0.5||y_ele<0.5||567.5<y_ele){gameover()}
+  if(965.5<x_ele){gameover('clear!!')}
+}
+function ene(x,y,r,a='rgba(0,0,0,0.78)'){
+  cvs.beginPath();
+  cvs.arc(x,y,r,0,2*Math.PI,false);
+  cvs.fillStyle=a;
+  cvs.fill();
+  cvs.closePath();
+  if((x_ele-x)**2+(y_ele-y)**2<(r+1)**2){gameover()}
+}
+function coin(x,y,d){
+  if(d==1){
+    cvs.beginPath();
+    cvs.arc(x,y,10,0,2*Math.PI,false);
+    cvs.fillStyle='#f5cc00';
+    cvs.fill();
+    cvs.closePath();
+  //----------------------
+    cvs.beginPath();
+    cvs.rect(x-2.5,y-6,5,12);
+    cvs.fillStyle = '#ffff52';
+    cvs.fill();
+    cvs.closePath();
+    if((x_ele-x)**2+(y_ele-y)**2<(10+5)**2){
+      d-=0.253
+    }
+    return d
+  }else if(d>0){
+    d-=0.0015
+    cvs.font = `${d>0.3?90:162-450*(1-d*2)**2}px Arial`;
+    cvs.fillStyle = `rgba(${d*425-65},${-d*425+320},255)`;
+    cvs.fillText('Nice!!',d>0.3?390+Math.sin(Math.PI*8*(d+0.3)**2):1649-3e3*(d*2)**1.7,d>0.3?320+Math.sin(Math.PI*6*d)*8:7.5e3*(d*2)**6-32);
+    return d
+  }
+}
+var x_ele=y_ele=5;
+var x_mouse=y_mouse=6;
+var c1=c2=c3=c4=c5=c6=c7=c8=c9=c10=c11=c12=1;
+addEventListener('mousemove',(e)=>{x_mouse=e.clientX-200;y_mouse=e.clientY-100;});
+me(5,5);
+setInterval(memove,10)
+var t=0;
+var t2=0;
+function memove(){
+  disX=x_ele-x_mouse;
+  disY=y_ele-y_mouse;
+  a=-((disX)**2+(disY)**2)*(Math.sign(disX)+Math.abs(Math.sign(disX))-1)/3e4;
+  theta=Math.atan(disY/disX);
+  x_ele+=a*Math.cos(theta);
+  y_ele+=a*Math.sin(theta);
+  me(x_ele,y_ele);
+  ene(100,50,50);
+  ene(100,150,50);
+  ene(100,270,70);
+  ene(0,400,60);
+  ene(108,420,50);
+  ene(Math.abs(t)/10+180,400,Math.abs(t)/10+24,'rgba()');
+  ene(218,290,50);
+  ene(283,317,20);
+  ene(323,374,50);
+  ene(316,443,20);
+  ene(270,496,50);
+  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+500,Math.sin(t*Math.PI/360)*60+400,25);
+  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+500,Math.sin(t*Math.PI/360)*110+400,25);
+  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+500,Math.sin(t*Math.PI/360)*160+400,25);
+  ene(500,400,35);
+  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+700,-Math.sin(t*Math.PI/360)*60+530,25);
+  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+700,-Math.sin(t*Math.PI/360)*110+530,25);
+  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+700,-Math.sin(t*Math.PI/360)*160+530,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+700,Math.sin(t*Math.PI/360)*60+530,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+700,Math.sin(t*Math.PI/360)*110+530,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+700,Math.sin(t*Math.PI/360)*160+530,25);
+  ene(700,530,35);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+600,-Math.sin(t*Math.PI/360)*60+230,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+600,-Math.sin(t*Math.PI/360)*110+230,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+600,-Math.sin(t*Math.PI/360)*160+230,25);
+  ene(600,230,35);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+430,Math.sin(t*Math.PI/360)*60+230,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+430,Math.sin(t*Math.PI/360)*110+230,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+430,Math.sin(t*Math.PI/360)*160+230,25);
+  ene(430,230,35);
+  ene(225,45,25);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*45*Math.sign(t)+225,Math.sin(t*Math.PI/360)*45+45,20);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos((t+180)*Math.PI/360)*45*Math.sign(t)+225,Math.sin((t+180)*Math.PI/360)*45+45,20);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos((t+360)*Math.PI/360)*45*Math.sign(t)+225,Math.sin((t+360)*Math.PI/360)*45+45,20);
+  ene(-(Math.sign(t*Math.PI)||1)*Math.cos((t+540)*Math.PI/360)*45*Math.sign(t)+225,Math.sin((t+540)*Math.PI/360)*45+45,20);
+  ene(0,Math.sin((t*2-45)*Math.PI/360)*45+515,10);
+  ene(20,Math.sin((t*2)*Math.PI/360)*45+515,10);
+  ene(40,Math.sin((t*2+45)*Math.PI/360)*45+515,10);
+  ene(60,Math.sin((t*2+90)*Math.PI/360)*45+515,10);
+  ene(80,Math.sin((t*2+135)*Math.PI/360)*45+515,10);
+  c1=coin(200,20,c1)
+  c2=coin(250,20,c2)
+  c3=coin(200,70,c3)
+  c4=coin(250,70,c4)
+  c5=coin(20,490,c5)
+  c6=coin(70,490,c6)
+  c7=coin(20,540,c7)
+  c8=coin(70,540,c8)
+  c9=coin(516,225,c9)
+  c10=coin(550,310,c10)
+  c11=coin(465,320,c11)
+  c12=coin(750,550,c12)
+  t=t<=360?t+1:-360;
+}
+
+//tas---------------
+/*
+function tas(x,y,t){
+    setTimeout((x,y)=>{x_mouse=x;y_mouse=y;},t,x,y)
+}
+//Tool Assisted Superplay
+tas(1360,0,0)
+tas(0,100,10)
+tas(0,110,30)
+tas(0,125,160)
+tas(0,130,260)
+tas(0,135,360)
+tas(0,140,460)
+tas(0,145,560)
+tas(15,150,660)
+tas(20,155,760)
+tas(25,170,860)
+tas(30,175,960)
+tas(60,180,1060)
+tas(95,200,1160)
+tas(120,200,1260)
+tas(140,220,1360)
+tas(150,230,1460)
+tas(160,235,1560)
+tas(180,230,1570)
+tas(200,220,1580)
+tas(280,280,1590)
+tas(360,320,1600)
+tas(390,380,1610)
+tas(1200,100,1620)
+tas(400,220,1630)
+tas(350,225,1640)
+tas(330,230,1650)
+tas(320,235,1660)
+tas(315,240,1670)
+tas(285,245,1680)
+tas(290,250,1690)
+tas(300,250,1700)
+tas(310,255,1710)
+tas(315,265,1720)
+tas(325,275,1730)
+tas(325,285,1740)
+tas(315,295,1750)
+tas(310,295,1760)
+tas(295,310,1770)
+tas(290,310,1780)
+tas(285,310,1790)
+tas(275,310,1800)
+tas(265,310,1810)
+tas(255,310,1820)
+tas(245,310,1830)
+tas(240,315,1840)
+tas(235,320,1850)
+tas(230,330,1860)
+tas(225,335,1870)
+tas(220,340,1880)
+tas(215,350,1890)
+tas(210,360,1900)
+tas(205,370,1910)
+tas(200,380,1920)
+tas(195,390,1930)
+tas(190,400,1940)
+tas(185,410,1950)
+tas(180,420,1960)
+tas(175,430,1970)
+tas(170,440,1980)
+tas(165,450,1990)
+tas(160,450,2000)
+tas(155,450,2010)
+tas(150,440,2020)
+tas(120,440,2030)
+tas(0,435,2040)
+tas(0,430,2050)
+tas(0,420,2060)
+tas(0,410,2070)
+tas(0,400,2080)
+tas(0,405,2090)
+tas(-100,410,2090)
+tas(-120,420,2100)
+tas(-160,440,2110)
+tas(-200,460,2120)
+tas(-260,480,2130)
+tas(-240,240,2140)
+tas(-920,200,2150)
+tas(-40,200,2160)
+tas(x_ele,y_ele+200,4e3)
+tas(100,1270,9.8e3)
+tas(1333,386,9840)
+tas(320,360,9880)
+tas(322,460,10880)
+tas(324,461,10890)
+tas(326,464,10900)
+tas(328,466,10910)
+tas(327,468,10920)
+tas(326,470,10930)
+tas(325,472,10940)
+tas(324,474,10950)
+tas(323,476,10960)
+tas(324,478,10970)
+tas(324,480,10980)
+tas(324,482,10990)
+tas(324,484,11000)
+tas(324,486,11010)
+tas(324,488,11020)
+tas(345,490,11030)
+tas(324,492,11040)
+tas(327,494,11050)
+tas(328,496,11060)
+tas(327,498,11070)
+tas(326,500,11080)
+tas(325,502,11090)
+tas(324,504,11100)
+tas(323,506,11110)
+tas(322,508,11120)
+tas(321,510,11130)
+tas(320,512,11140)
+tas(318,514,11150)
+tas(316,516,11160)
+tas(314,518,11170)
+tas(308,520,11180)
+tas(307,522,11190)
+tas(306,524,11200)
+tas(304,526,11210)
+tas(303,528,11220)
+tas(301,530,11230)
+tas(300,532,11240)
+tas(298,534,11250)
+tas(296,536,11260)
+tas(294,538,11270)
+tas(292,540,11280)
+tas(290,542,11290)
+tas(288,544,11300)
+tas(286,546,11310)
+tas(284,548,11320)
+
+/*
+//Tool Assisted Speedrun
+tas(0,768,0)
+tas(1136,640,270)
+tas(200,768,330)
+tas(0,768,360)
+tas(1266,768,460)
+tas(0,768,470)
+tas(800,768,580)
+tas(0,768,590)
+tas(700,768,620)
+tas(0,768,630)
+tas(500,768,640)
+tas(0,768,650)
+tas(600,768,660)
+tas(0,768,670)
+tas(700,768,680)
+tas(0,768,690)
+tas(700,768,700)
+tas(0,768,710)
+tas(1366,700,720)
+tas(1366,540,750)
+tas(1300,0,850)
+tas(1150,0,850)
+//------バグありTAS------
+function tas(x,y,t){
+    setTimeout((x,y)=>{x_mouse=x;y_mouse=y;},t,x,y)
+}
+x_mouse=5360
+y_mouse=100
+setTimeout(()=>{x_mouse=1168},10)
+*/
+</script>
