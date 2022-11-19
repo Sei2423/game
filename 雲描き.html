@@ -1,0 +1,29 @@
+<canvas width="480" height="420" id="canvas" style="position: relative;"></canvas>
+<style>
+#canvas{
+}
+</style>
+<script>
+i=prompt("回数")||100;
+r=prompt("範囲")||30;
+var ctx = canvas.getContext("2d");
+onload = function() {
+  ctx.fillStyle = '#90d7ec';
+  ctx.beginPath();
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+canvas.addEventListener("mousemove",write);
+function write(e){
+  if(e.shiftKey){
+    console.log(i);
+    for(let l=0;l++<i;){
+      ctx.beginPath();
+      ctx.fillStyle = "#f7f7f710";
+      ctx.arc(e.clientX+Math.random()*r-r/2,e.clientY+Math.random()*r-r/2,1,0,Math.PI * 2);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+}
+
+</script>
