@@ -1,89 +1,266 @@
-<canvas id="canvas" width="966px" height="568px" style="position:fixed;top:100;left:200;"></canvas>
-<style>
-#canvas{border-style:solid;border-width:1px;border-color:();}
-</style>
+<body>
 <script>
-var st=0;
-var canvas=document.getElementById('canvas');
-var cvs=canvas.getContext('2d');
-function zero(x){
-  return x>0?x:0;
+console.log('いらないこ〜ど')
+//メイン関数
+function main() {
+    cvs.width = 966;
+    cvs.height = 568;
+    cvs.style.position = 'fixed';
+    cvs.style.top = '100px';
+    cvs.style.left = '200px';
+    document.body.appendChild(cvs);
+    
+    recorder.start();
+
+    addEventListener('mousemove', mousemove);
+    init();
+    setInterval(update, 10)
 }
-function gameover(tell="gameover"){
-  alert(tell);if(st==0){x_mouse=y_mouse=4;x_ele=y_ele=5;}else{x_mouse=800;y_mouse=500;x_ele=801;y_ele=501}
+
+//アップデート関数
+function update() {
+    info.t += 1;
+    info.mt = info.mt < 180 ? info.mt + 0.5 : -180;
+
+    points.push([info.player.x, info.player.y]);
+
+    draw_bg();
+    player();
+    enemy();
+    coin();
 }
-function me(x,y){
-  cvs.beginPath();
-  cvs.clearRect(0,0,canvas.width,canvas.height);
-  cvs.arc(x,y,5,0,2*Math.PI,false);
-  cvs.fillStyle='red';
-  cvs.fill();
-  cvs.closePath();
-  if(x_ele<0.5||y_ele<0.5||567.5<y_ele){gameover()}
-  if(965.5<x_ele){gameover('clear!!')}
+//初期化関数
+function init() {
+    info = {t : 0, mt : 0, coin : 0, player : {x : 15, y : 5}, mouse : {x : 4.5, y : 4.5}};
+    exists_coin = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 }
-function ene(x,y,r,a='rgba(0,0,0,0.78)'){
-  cvs.beginPath();
-  cvs.arc(x,y,r,0,2*Math.PI,false);
-  cvs.fillStyle=a;
-  cvs.fill();
-  cvs.closePath();
-  if((x_ele-x)**2+(y_ele-y)**2<(r+1)**2){gameover()}
+/*---------変数定義---------*/
+let info;
+let points = [];
+
+const cvs = document.createElement('canvas');
+const ctx = cvs.getContext('2d');
+
+const ENEMIES_MAP = {
+    normal : [
+        [100, 50, 50],
+        [100, 150, 50],
+        [100, 270, 70],
+        [0, 400, 60],
+        [108, 420, 50],
+        [218, 290, 50],
+        [283, 317, 20],
+        [323, 374, 50],
+        [316, 443, 20],
+        [270, 496, 50]
+    ],
+    updown : [],
+    bigsmall : [[180, 400]],
+    rotate : [],
+    bar : [
+        [500, 400],
+        [600, 230, 1, 180],
+        [430, 230, -1, 180]
+    ],
+    doublebar : [
+        [700, 530, -1]
+    ],
+    flower : [
+        [225, 45, -1]
+    ],
+    wave : [
+        [0, 515]
+    ]
+};
+const COIN_MAP = [
+    [200, 20],
+    [250, 20],
+    [200, 70],
+    [250, 70],
+    [20, 490],
+    [70, 490],
+    [20, 540],
+    [70, 540],
+    [516, 225],
+    [550, 310],
+    [465, 320],
+    [750, 550]
+];
+let exists_coin;
+
+const r2d = Math.PI / 180;
+
+/*---------関数定義---------*/
+
+//描画系
+function draw_circle(x, y, r, color = 'rgba(0, 0, 0, 0.78)') {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
 }
-var x_ele=y_ele=5;
-var x_mouse=y_mouse=6;
-addEventListener('mousemove',(e)=>{x_mouse=e.clientX-200;y_mouse=e.clientY-100;});
-me(5,5);
-setInterval(memove,10)
-var t=0;
-var t2=0;
-function memove(){
-  disX=x_ele-x_mouse;
-  disY=y_ele-y_mouse;
-  a=-((disX)**2+(disY)**2)*(Math.sign(disX)+Math.abs(Math.sign(disX))-1)/3e4;
-  theta=Math.atan(disY/disX);
-  x_ele+=a*Math.cos(theta);
-  y_ele+=a*Math.sin(theta);
-  me(x_ele,y_ele);
-  ene(100,50,50);
-  ene(100,150,50);
-  ene(100,270,70);
-  ene(0,400,60);
-  ene(108,420,50);
-  ene(Math.abs(t)/10+180,400,Math.abs(t)/10+24,'rgba()');
-  ene(218,290,50);
-  ene(283,317,20);
-  ene(323,374,50);
-  ene(316,443,20);
-  ene(270,496,50);
-  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+500,Math.sin(t*Math.PI/360)*60+400,25);
-  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+500,Math.sin(t*Math.PI/360)*110+400,25);
-  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+500,Math.sin(t*Math.PI/360)*160+400,25);
-  ene(500,400,35);
-  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+700,-Math.sin(t*Math.PI/360)*60+530,25);
-  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+700,-Math.sin(t*Math.PI/360)*110+530,25);
-  ene((Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+700,-Math.sin(t*Math.PI/360)*160+530,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+700,Math.sin(t*Math.PI/360)*60+530,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+700,Math.sin(t*Math.PI/360)*110+530,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+700,Math.sin(t*Math.PI/360)*160+530,25);
-  ene(700,530,35);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+600,-Math.sin(t*Math.PI/360)*60+230,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+600,-Math.sin(t*Math.PI/360)*110+230,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+600,-Math.sin(t*Math.PI/360)*160+230,25);
-  ene(600,230,35);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*60*Math.sign(t)+430,Math.sin(t*Math.PI/360)*60+230,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*110*Math.sign(t)+430,Math.sin(t*Math.PI/360)*110+230,25);
-  ene(-(Math.sign(t*Math.PI)||1)*Math.cos(t*Math.PI/360)*160*Math.sign(t)+430,Math.sin(t*Math.PI/360)*160+230,25);
-  ene(430,230,35);
-  t=t<=360?t+1:-360;
+
+function draw_rect(x, y, width, height, color = '#FFFF52') {
+    ctx.beginPath();
+    ctx.rect(x, y, width, height);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
 }
-/*
-x_mouse=800
-y_mouse=500
-x_ele=801
-y_ele=501
-function tas(x,y,t){
-    setTimeout((x,y)=>{x_mouse=x;y_mouse=y;},t,x,y)
+
+//キャラクター、オブジェクト描画
+function draw_player(x, y) {
+    draw_circle(x, y, 5, 'red');
 }
-*/
+
+function draw_coin(x, y, width, height) {
+    draw_circle(x, y, 10, '#F5CC00');
+    draw_rect(x - 2.5, y - 6, 5, 12);
+}
+
+function draw_enemy(x, y, r) {
+    draw_circle(x, y, r);
+}
+
+function draw_bg() {
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    draw_rect(0, 0, cvs.width, cvs.height, '#FFFFFF');
+}
+
+//イベント（当たり判定、ゲームオーバー、クリア、コイン取得）
+function isHitPlayer(x, y, r) {
+    return (info.player.x - x) ** 2 + (info.player.y - y) ** 2 < (r + 5) ** 2
+}
+
+function finish(msg) {
+    console.log(msg, info);
+    recorder.stop();
+}
+
+function get_coin(i) {
+    const d = exists_coin[i];
+    ctx.font = `${d>0.3?90:162-450*(1-d*2)**2}px Arial`;
+    ctx.fillStyle = `rgba(${d*425-65},${-d*425+320},255)`;
+    ctx.fillText('Nice!!',d>0.3?390+Math.sin(Math.PI*8*(d+0.3)**2):1649-3e3*(d*2)**1.7,d>0.3?320+Math.sin(Math.PI*6*d)*8:7.5e3*(d*2)**6-32);
+    exists_coin[i] = Math.max(d - 0.0015, 0);
+}
+
+//イベントリスナー
+function mousemove(e) {
+    info.mouse.x = e.clientX - 200;
+    info.mouse.y = e.clientY - 100;
+}
+
+//敵の種類
+const enemy_type = {
+    normal(x, y, r) {
+        draw_enemy(x, y, r);
+        if(isHitPlayer(x, y, r - 4)) finish('GAMEOVER');
+    },
+    updown(x, y, r, t = 0) {
+        this.normal(x, Math.sin((info.mt * 2 + t) * r2d) * 45 + y, r);
+    },
+    bigsmall(x, y, t = 0) {
+        this.normal(Math.abs(info.mt * 2 + t) / 10 + x, y, Math.abs(info.mt * 2 + t) / 10 + 24);
+    },
+    rotate(x, y, r, dis, speed, t) {
+        this.normal(Math.cos((info.mt * speed + t) * r2d) * dis + x, Math.sin((info.mt * speed + t) * r2d) * dis + y, r);
+    },
+    bar(x, y, speed = 1, t = 0) {
+        this.normal(x, y, 35);
+        this.rotate(x, y, 25, 60, speed, t);
+        this.rotate(x, y, 25, 110, speed, t);
+        this.rotate(x, y, 25, 160, speed, t);
+    },
+    doublebar(x, y, speed, t = 0) {
+        this.bar(x, y, speed, t + 180);
+        this.rotate(x, y, 25, 60, speed, t);
+        this.rotate(x, y, 25, 110, speed, t);
+        this.rotate(x, y, 25, 160, speed, t);
+    },
+    flower(x, y, speed, t = 0) {
+        this.normal(x, y, 25);
+        this.rotate(x, y, 20, 45, speed, t);
+        this.rotate(x, y, 20, 45, speed, t + 90);
+        this.rotate(x, y, 20, 45, speed, t + 180);
+        this.rotate(x, y, 20, 45, speed, t + 270);
+    },
+    wave(x, y, t = 0) {
+        this.updown(x, y, 10, t - 22.5);
+        this.updown(x + 20, y, 10, t);
+        this.updown(x + 40, y, 10, t + 22.5);
+        this.updown(x + 60, y, 10, t + 45);
+        this.updown(x + 80, y, 10, t + 67.5);
+    }
+}
+
+//メイン
+function player() {
+    const disX = info.player.x - info.mouse.x,
+          disY = info.player.y - info.mouse.y;
+    const speed = - (disX ** 2 + disY ** 2) / 30000,
+          rad = Math.atan2(disY, disX);
+    info.player.x += Math.cos(rad) * speed;
+    info.player.y += Math.sin(rad) * speed;
+    if(info.player.x < 0.5 || info.player.y < 0.5 || 567.5 < info.player.y) finish('GAMEOVER')
+    if(965.5 < info.player.x) finish('CLEAR')
+    draw_player(info.player.x, info.player.y);
+}
+
+function enemy() {
+    for(type in ENEMIES_MAP) {
+        ENEMIES_MAP[type].map(data => {
+            enemy_type[type](...data);
+        });
+    }
+}
+
+function coin() {
+    for(i = 0; i < 12; i++) {
+        if(exists_coin[i] == 1) {
+            draw_coin(...COIN_MAP[i]);
+            if(isHitPlayer(COIN_MAP[i][0], COIN_MAP[i][1], 10)) {
+                get_coin(i);
+                exists_coin[i] = 0.747;
+            }
+        } else if(exists_coin[i]) {
+            get_coin(i);
+        }
+    }
+}
+
+//録画、ダウンロード
+
+function download(name, data, data_type) {
+    const blob = new Blob([data], {type: data_type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.download = name;
+    a.href = url;
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+const stream = cvs.captureStream();
+let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+
+recorder.ondataavailable = e => {
+    if(info.t > 200){
+        const now = (new Date()).toLocaleString()
+        download(now, e.data, 'video/webm');
+        download(now, points.map(x=>x.join()).join('\n'), 'text/csv');
+    }
+    console.log(info.t);
+    points = [];
+    
+    init();
+    recorder.start();
+}
+
+
+main();
 </script>
+</body>
